@@ -32,7 +32,7 @@ const store = await HNSWLib.fromTexts(
   docs,
   docs.map((_, i) => ({ id: i })),
   new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY
+    openAIApiKey: "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"
   })
 )
 

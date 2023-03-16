@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Thirukkural AI</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: sans-serif;
+			background-color: #f5f5f5;
+		}
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			background-color: white;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+			border-radius: 10px;
+			padding: 20px;
+			box-sizing: border-box;
+		}
+		.container h1 {
+			font-size: 36px;
+			margin: 0 0 20px;
+			text-align: center;
+		}
+		.input-box {
+			width: 100%;
+			max-width: 500px;
+			height: 50px;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			font-size: 16px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			box-sizing: border-box;
+			margin-bottom: 20px;
+			text-align: center;
+		}
+		.submit-button {
+			background-color: #007bff;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+		.submit-button:hover {
+			background-color: #0069d9;
+		}
+		.output-box {
+			width: 100%;
+			max-width: 500px;
+			min-height: 50px;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			font-size: 16px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			box-sizing: border-box;
+			margin-bottom: 20px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Thirukkural AI</h1>
+    <h4>Built By Gautam 🇮🇳</h4>
+		<input id='input' type="text" class="input-box" placeholder="Enter your question..">
+		<button id="submit" class="submit-button">Search</button>
+    <br/>
+    
+		<textarea id="output" class="output-box" placeholder="Output will appear here..." rows="17" readonly></textarea>
+	</div>
+
+  <script>
+    let generating = false;
+    document.getElementById("submit").addEventListener("click", () => {
+      if(generating) return;
+        let inputVal = document.getElementById("input")?.value;
+
+      console.log(inputVal)
+      if(inputVal && inputVal.trim().length > 0) {
+        generating = true;
+        document.getElementById("submit").innerHTML = "Searching.."
+        fetch("/query", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt: inputVal
+          })
+        }).then((r) => r.json()).then((json) => {
+          document.getElementById("submit").innerHTML = "Search"
+          generating = false
+          document.getElementById("output").value = json.output;
+        }).catch((e) => {
+          alert("An unexpected error occured.")
+          generating = false;
+          document.getElementById("submit").innerHTML = "Search"
+        })
+      }
+    });
+  </script>
+</body>
+</html>
